@@ -8,3 +8,8 @@ pom.xml.asc
 *.class
 /.lein-*
 /.nrepl-port
+/.idea/ClojureProjectResolveSettings.xml
+/.idea/doppelanger-server.iml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
