@@ -12,3 +12,12 @@ pom.xml.asc
 .lein-failures
 .nrepl-port
 .cpcache/
+log/*
+resources/*
+dev-target/*
+.idea/*
+.dir-locals.el
+.lein-env
+doppelanger.iml
+Procfile
+system.properties
