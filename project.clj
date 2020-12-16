@@ -21,7 +21,7 @@
                  [compojure "1.6.1"]
                  [reagent "1.0.0-rc1"]
                  [arttuka/reagent-material-ui "4.11.0-4"]
-]
+                 [org.clojure/core.async "1.3.610"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-environ "1.1.0"]]
@@ -42,7 +42,7 @@
   ;; nREPL by default starts in the :main namespace, we want to start in `user`
   ;; because that's where our development helper functions like (go) and
   ;; (browser-repl) live.
-  :repl-options {:init-ns user}
+  :repl-options {:init-ns user :port 12345}
 
   :cljsbuild {:builds
               [{:id "app"
