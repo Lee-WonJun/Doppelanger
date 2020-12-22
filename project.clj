@@ -21,7 +21,10 @@
                  [compojure "1.6.1"]
                  [reagent "1.0.0-rc1"]
                  [arttuka/reagent-material-ui "4.11.0-4"]
-                 [org.clojure/core.async "1.3.610"]]
+                 [org.clojure/core.async "1.3.610"]
+                 [cljs-ajax "0.7.5"]
+                 [cljs-http "0.1.46"]
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-environ "1.1.0"]]

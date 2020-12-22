@@ -25,5 +25,6 @@
          response
          (assoc :headers {"Content-Type" "text/html; charset=utf-8"})
          pass ))
-   (GET "/domain" [] (pass (json ["scala" "clojure" "fsharp" "csharp"])))
+   (GET "/domain" [] (pass (json ["scala" "clojure" "fsharp" "csharp" "cpp"])))
+   (GET "/dopple" [start-domain keyword goal-domain] (str start-domain keyword goal-domain))
    (resources "/")))
