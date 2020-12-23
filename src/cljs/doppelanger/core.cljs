@@ -6,6 +6,14 @@
              [reagent-material-ui.core.text-field :refer [text-field]]
              [reagent-material-ui.core.textarea-autosize :refer [textarea-autosize]]
              [reagent-material-ui.core.toolbar :refer [toolbar]]
+             [reagent-material-ui.core.table :refer [table]]
+             [reagent-material-ui.core.table-body :refer [table-body]]
+             [reagent-material-ui.core.table-cell :refer [table-cell]]
+             [reagent-material-ui.core.table-container :refer [table-container]]
+             [reagent-material-ui.core.table-footer :refer [table-footer]]
+             [reagent-material-ui.core.table-head :refer [table-head]]
+             [reagent-material-ui.core.table-row :refer [table-row]]
+             [reagent-material-ui.core.paper :refer [paper]]
              [cljs.core.async :as async]
              [ajax.core :as ajax]
              [cljs-http.client :as http]
@@ -23,7 +31,17 @@
 (defonce start-domain (r/atom "scala"))
 (defonce goal-domain (r/atom "clojure"))
 (defonce search-keyword (r/atom "" ))
-(defonce goal-keyword (r/atom []))
+(defonce goal-keywords (r/atom []))
+
+(defn table-code [item-atom]  [table-container
+                  [table-head
+                   [table-row
+                    [table-cell "domain"]
+                    [table-cell "keyword"]]]
+                  [table-body
+                   (map #(vec [table-row [table-cell (get % "domain")] [table-cell (get % "keyword")]] ) @item-atom)]])
+
+(def table-code-atom (r/atom (table-code goal-keywords)))
 
 (defn load-domains! []
   (ajax/GET "/domain"
@@ -34,17 +52,17 @@
 
 (async/go-loop []
                (let [x (async/<! c)]
-                 (println "Got a value in this loop:" x)
-                 (ajax/GET "/dopple" {:params {:start_domain @start-domain
-                                               :keyword @search-keyword
-                                               :goal_domain @goal-domain }}))
+                 (ajax/GET "/dopple" {:params  {:start_domain @start-domain
+                                                :keyword      @search-keyword
+                                                :goal_domain  @goal-domain}
+                                      :handler (fn [response] (do (.log js/console (str response))
+                                                                  (reset! goal-keywords response)
+                                                                  (reset! table-code-atom (table-code goal-keywords))))}))
                (recur))
 
 
 (defn get-similar-keywords [keyword]
   (async/put! c keyword) )
-
-
 
 (defn domain-field [domain-atom]
   [text-field
@@ -62,10 +80,10 @@
 (defn main []
   [:<>
    [grid {:container true :spacing 3}
-   [grid
-    {:item true
-     :xs   2}
-    (domain-field start-domain) ]
+    [grid
+     {:item true
+      :xs   2}
+     (domain-field start-domain) ]
     [grid
      {:item true
       :xs 8}
@@ -75,7 +93,8 @@
     [grid
      {:item true
       :xs   6}
-     (domain-field goal-domain )]]])
+     (domain-field goal-domain)]]
+   @table-code-atom])
 
 (defn render []
   (load-domains!)

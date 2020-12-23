@@ -24,6 +24,7 @@
                  [org.clojure/core.async "1.3.610"]
                  [cljs-ajax "0.7.5"]
                  [cljs-http "0.1.46"]
+                 [cljsjs/react-table "6.8.6-0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
