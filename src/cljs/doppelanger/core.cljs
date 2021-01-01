@@ -27,8 +27,8 @@
   [^js/Event e]
   (.. e -target -value))
 
-(defonce domains (r/atom ["scala" "clojure" "fsharp" "csharp"]))
-(defonce start-domain (r/atom "scala"))
+(defonce domains (r/atom ["all" "scala" "clojure" "fsharp" "csharp"]))
+(defonce start-domain (r/atom "all"))
 (defonce goal-domain (r/atom "clojure"))
 (defonce search-keyword (r/atom "" ))
 (defonce goal-keywords (r/atom []))

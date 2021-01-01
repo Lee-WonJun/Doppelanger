@@ -18,9 +18,9 @@
 
 (defn search-keyword [start-domain keyword goal-domain]
   (rand-nth [ (vector {:domain "csharp" :keyword "Select" :description "Linq Select" :pros 30 :cons 50 :uuid 12345 }
-                       { :domain "csharp" :keyword "Select" :description "Linq Select, signture is (T item, int index)" :pros 55 :cons 4 :uuid 54321})
+                       { :domain "csharp" :keyword "Select" :description "Linq Select, signature is (T item, int index)" :pros 55 :cons 4 :uuid 54321})
               (vector {:domain "fsharp" :keyword "map" :description "Linq Select" :pros 30 :cons 50 :uuid 12345 }
-                       { :domain "fsharp" :keyword "Seq.map" :description "Linq Select, signture is (T item, int index)" :pros 55 :cons 4 :uuid 54321})])
+                       { :domain "fsharp" :keyword "Seq.map" :description "Linq Select, signature is (T item, int index)" :pros 55 :cons 4 :uuid 54321})])
  )
 
 (defn home-routes [endpoint]
@@ -32,7 +32,7 @@
          response
          (assoc :headers {"Content-Type" "text/html; charset=utf-8"})
          pass ))
-   (GET "/domain" [] (pass (json ["scala" "clojure" "fsharp" "csharp" "cpp"])))
+   (GET "/domain" [] (pass (json ["all" "scala" "clojure" "fsharp" "csharp" "cpp"])))
    (GET "/dopple" [start-domain keyword goal-domain] (-> (search-keyword start-domain keyword goal-domain)
                                                          (json)
                                                          (pass)))
