@@ -5,26 +5,37 @@
     [clojure.java.io :as io]
     [doppelanger.middleware :as middleware]
     [ring.util.response]
-    [ring.util.http-response :as response]))
+    [ring.util.http-response :as response]
+    [clojure.string :as string]))
 
 (defn pass [x]
   (println x)
   x)
 
-(defn search-keyword [start-domain keyword goal-domain]
-  (rand-nth [ (vector {:domain "csharp" :keyword "Select" :description "Linq Select" :pros 30 :cons 50 :uuid 12345 }
-                      { :domain "csharp" :keyword "Select" :description "Linq Select, signature is (T item, int index)" :pros 55 :cons 4 :uuid 54321})
-             (vector {:domain "fsharp" :keyword "map" :description "Linq Select" :pros 30 :cons 50 :uuid 12345 }
-                     { :domain "fsharp" :keyword "Seq.map" :description "Linq Select, signature is (T item, int index)" :pros 55 :cons 4 :uuid 54321})])
-  )
+
+(def available? (comp string/lower-case string/trim))
+
+(defn get-every-domain [] (map :domain (db/get-domain)))
+
+(defn search-dopple [domain keyword]
+  (as->  {:keyword keyword} $
+         (db/get-keyword-id $)
+         (map :keywordid $)
+         (distinct $)
+         (mapcat #(db/get-relation-groups {:keyword_id %}) $)
+         (distinct $)
+         (map :relationgroup $)
+         (map #(db/get-dopple-keyword {:relation_group % :domain domain}) $)
+         (map :keyword $)))
+
 
 (defn api-routes []
   ["/api"
    {:middleware [middleware/wrap-csrf
                  middleware/wrap-formats]}
-   ["/domain" {:get (fn [_] {:body ["scala" "clojure" "fsharp" "csharp" "cpp"]})}]
-   ["/dopple" {:get (fn [{{start-domain :start_domain keyword :keyword goal-domain :goal_domain} :params}]
-                      (let [_ (println start-domain keyword goal-domain)
-                            reply (search-keyword start-domain keyword goal-domain)]
+   ["/domain" {:get (fn [_] {:body (get-every-domain)})}]
+   ["/dopple" {:get (fn [{{domain :domain keyword :keyword} :params}]
+                      (let [_ (println domain keyword)
+                            reply (search-dopple domain keyword)]
                         {:body reply}))}]])
 
