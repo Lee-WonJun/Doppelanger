@@ -12,6 +12,10 @@
 
 (conman/bind-connection *db* "sql/queries.sql")
 
+(defn get-every-relations-group-info [] (->> (get-relations)
+                                             (map #(dissoc % :idx :keywordid))
+                                             (group-by :relationgroup)))
+
 (extend-protocol next.jdbc.result-set/ReadableColumn
   java.sql.Timestamp
   (read-column-by-label [^java.sql.Timestamp v _]
