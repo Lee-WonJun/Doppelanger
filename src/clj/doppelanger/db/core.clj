@@ -13,7 +13,7 @@
 (conman/bind-connection *db* "sql/queries.sql")
 
 (defn get-every-relations-group-info [] (->> (get-relations)
-                                             (map #(dissoc % :idx :keywordid))
+                                             (map #(dissoc % :idx))
                                              (group-by :relationgroup)))
 
 (extend-protocol next.jdbc.result-set/ReadableColumn

@@ -24,4 +24,4 @@
                         _ (println reply)]
                     {:body reply})))
 
-(def get-relation (fn [_]))
+(def get-relation (fn [_] {:body (db/get-every-relations-group-info)}))

@@ -1,6 +1,5 @@
 (ns doppelanger.routes.api
   (:require
-
     [doppelanger.middleware :as middleware]
     [ring.util.response]
     [doppelanger.logic.interface :as interface]))

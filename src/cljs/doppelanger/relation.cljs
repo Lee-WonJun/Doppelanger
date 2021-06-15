@@ -9,6 +9,7 @@
             [reagent-material-ui.core.typography :refer [typography]]
             [reagent-material-ui.core.paper :refer [paper]]
             [reagent-material-ui.core.button :refer [button]]
+            [reagent-material-ui.core.chip :refer [chip]]
             [cljs.core.async :as async]
             ["@material-ui/core" :as mui]
             [ajax.core :as ajax]
@@ -18,42 +19,17 @@
   [^js/Event e]
   (.. e -target -value))
 
-(defonce domains (r/atom []))
-(defonce search-domain (r/atom nil))
-(defonce search-keyword (r/atom nil))
+(defonce relations (r/atom []))
 
-(defn load-domains! []
-  (ajax/GET "/api/domain"
-            {:handler (fn [response] (reset! domains response))}))
-(load-domains!)
-
-(defn keyword-field []
-  [text-field
-   {:value       @search-keyword
-    :label       "label"
-    :input-props {:style {:text-align "center"}}
-    :style       {:width 500}
-    :variant     "outlined"}
-   ])
-
-(defn autocomplete-domain []
-  [autocomplete {:options         @domains
-                 :style           {:width 250}
-                 :on-input-change (fn [e v]
-                                    (.log js/console v)
-                                    (reset! search-domain v)
-                                    )
-                 :render-input    (fn [^js params]
-                                    (set! (.-variant params) "outlined")
-                                    (set! (.-label params) "domain")
-                                    (r/create-element mui/TextField params))}])
+(defn load-relations! []
+  (ajax/GET "/api/relation"
+            {:handler (fn [response] (reset! relations response))}))
+(load-relations!)
 
 
 (defn search-bar []
   [grid {:container "true" :justify "center" :alignItems "center"}
-   (autocomplete-domain)
-   (keyword-field)
-   [button]
+   [chip {:label "asdf/asfd"}]
   ])
 
 (defn relation-page []
