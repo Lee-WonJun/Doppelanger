@@ -10,6 +10,7 @@
             [reagent-material-ui.core.paper :refer [paper]]
             [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.core.chip :refer [chip]]
+            [reagent-material-ui.styles :as style]
             [cljs.core.async :as async]
             ["@material-ui/core" :as mui]
             [ajax.core :as ajax]
@@ -26,11 +27,20 @@
             {:handler (fn [response] (reset! relations response))}))
 (load-relations!)
 
+(defn data->chips [relation]
+  (map #(vec [chip {:label (str (:domain %) "-" (:keyword %))}]) relation))
 
+(defn- relations->chips-group [relations]
+  (map #(vec [grid {:container "true" :id (key %)} [paper (data->chips (val %))]]) relations))
+
+(defn relations->chips-group! []
+  (let [relation @relations]
+    (if relation
+      (relations->chips-group @relations)
+      [])))
 (defn search-bar []
   [grid {:container "true" :justify "center" :alignItems "center"}
-   [chip {:label "asdf/asfd"}]
-  ])
+   (relations->chips-group!)])
 
 (defn relation-page []
   [:section.section>div.container>div.content
